@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sfprodisplay-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sfprodisplay-medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sfprodisplay-semibold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 700;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sfprodisplay-bold.woff2') format('woff2');
+}
+
+@layer base {
+  :root {
+    /* Custom theme color values - dynamically set by ThemeContext */
+    --primary-hue: 142;
+    --primary-saturation: 72%;
+    --primary-lightness: 43%;
+    
+    /* Spotify-inspired Light Mode */
+    --background: 0 0% 98%;
+    --foreground: 210 10% 10%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 210 10% 10%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 10% 10%;
+    
+    --primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 10% 96%;
+    --secondary-foreground: 210 10% 10%;
+    
+    --muted: 210 10% 96%;
+    --muted-foreground: 210 10% 40%;
+    
+    --accent: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 210 20% 92%;
+    --input: 210 20% 92%;
+    --ring: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 210 10% 10%;
+    --sidebar-primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 10% 96%;
+    --sidebar-accent-foreground: 210 10% 10%;
+    --sidebar-border: 210 20% 92%;
+    --sidebar-ring: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+  }
+
+  .dark {
+    /* Spotify-inspired Dark Mode */
+    --background: 0 0% 11%; /* Spotify Dark Theme */
+    --foreground: 0 0% 98%;
+    
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 65%;
+    
+    --accent: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+
+    --sidebar-background: 0 0% 8%; /* Spotify Sidebar Darker */
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: var(--primary-hue) var(--primary-saturation) var(--primary-lightness); /* Dynamic Theme Color */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: "ss01", "ss02", "ss03", "cv01", "cv02", "cv03", "cv04";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Glass effect for Spotify-inspired glassmorphism */
+  .glass {
+    @apply bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/10 dark:border-white/5 shadow-glass;
+  }
+
+  .glass-card {
+    @apply bg-white/70 dark:bg-card/50 backdrop-blur-lg border border-white/20 dark:border-white/5 shadow-glass;
+  }
+
+  .spotify-glass {
+    @apply backdrop-blur-xl bg-white/10 dark:bg-black/30 border border-white/10 dark:border-white/5 shadow-spotify;
+  }
+
+  /* Custom scrollbar - Spotify style */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-spotify-green/50;
+  }
+
+  /* Shimmer effect for loading states */
+  .shimmer {
+    @apply animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent bg-[length:1000px_100%];
+  }
+  
+  /* Spotify gradient */
+  .spotify-gradient {
+    @apply bg-gradient-to-br from-spotify-green to-spotify-darkgreen;
+  }
+  
+  /* Spotify text gradient */
+  .text-spotify-gradient {
+    @apply bg-gradient-to-r from-spotify-green to-spotify-darkgreen bg-clip-text text-transparent;
+  }
+}
+
+/* Spotify-inspired components */
+@layer components {
+  .spotify-button {
+    @apply bg-spotify-green hover:bg-spotify-darkgreen text-white rounded-full px-8 py-3 font-bold transition-all;
+  }
+  
+  .spotify-card {
+    @apply bg-card rounded-xl p-4 hover:bg-opacity-80 transition-all duration-300;
+  }
+  
+  .spotify-nav-item {
+    @apply text-muted-foreground hover:text-spotify-green transition-colors duration-200;
+  }
+}

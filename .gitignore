@@ -1,0 +1,12 @@
+# Cursor IDE files
+.cursor/
+*.cursor
+cursor.json
+.cursor-rules/
+cursor-rules.json
+cursor_rules/
+cursor_rules.json
+
+# Include frontend and backend specific gitignore
+frontend/.gitignore
+backend/.gitignore 
