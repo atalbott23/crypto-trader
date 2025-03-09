@@ -10,10 +10,14 @@ import { toast } from "sonner";
 import { Mail, Lock, User, Github } from "lucide-react";
 import { AvatarColorPicker } from "@/components/ui-custom/AvatarColorPicker";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Profile = () => {
   // Theme state
   const { theme, setTheme } = useTheme();
+  
+  // Auth state
+  const { user, login, register, logout, oAuthLogin, isAuthenticated } = useAuth();
   
   // State for login form
   const [loginEmail, setLoginEmail] = useState("");
@@ -24,65 +28,28 @@ const Profile = () => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
   
-  // State for profile (if logged in)
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // State for user profile
   const [userData, setUserData] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    joinedDate: "January 2023"
+    name: user?.name || "",
+    email: user?.email || "",
   });
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // This would connect to a backend for authentication
-    // For now, we'll simulate a successful login
-    setTimeout(() => {
-      setIsLoggedIn(true);
-      toast.success("Login successful", {
-        description: "Welcome back to your account"
-      });
-    }, 1000);
+    await login(loginEmail, loginPassword);
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // This would connect to a backend for registration
-    // For now, we'll simulate a successful registration
-    setTimeout(() => {
-      setIsLoggedIn(true);
-      setUserData({
-        ...userData,
-        name: registerName,
-        email: registerEmail
-      });
-      toast.success("Registration successful", {
-        description: "Your account has been created"
-      });
-    }, 1000);
+    await register(registerName, registerEmail, registerPassword);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    toast("Logged out successfully", {
-      description: "You have been securely logged out"
-    });
+    logout();
   };
 
-  const handleOAuthLogin = (provider: string) => {
-    // This would initiate OAuth flow
-    toast("Redirecting to " + provider, {
-      description: "You will be redirected to complete authentication"
-    });
-    
-    // Simulate successful login
-    setTimeout(() => {
-      setIsLoggedIn(true);
-      toast.success("Login successful", {
-        description: `You've been authenticated with ${provider}`
-      });
-    }, 1500);
+  const handleOAuthLogin = async (provider: string) => {
+    await oAuthLogin(provider);
   };
 
   const toggleTheme = () => {
@@ -90,7 +57,7 @@ const Profile = () => {
     toast.success(`Theme switched to ${theme === 'dark' ? 'light' : 'dark'} mode`);
   };
 
-  if (isLoggedIn) {
+  if (isAuthenticated && user) {
     // Show user profile when logged in
     return (
       <div className="space-y-6 max-w-3xl mx-auto py-4">
@@ -107,9 +74,9 @@ const Profile = () => {
                 <AvatarColorPicker size="lg" />
               </div>
               <div className="space-y-1 flex-grow">
-                <h3 className="text-xl font-semibold">{userData.name}</h3>
-                <p className="text-muted-foreground">{userData.email}</p>
-                <p className="text-sm text-muted-foreground">Member since {userData.joinedDate}</p>
+                <h3 className="text-xl font-semibold">{user.name}</h3>
+                <p className="text-muted-foreground">{user.email}</p>
+                <p className="text-sm text-muted-foreground">Member since {user.joinedDate}</p>
                 <div className="flex gap-2 mt-2">
                   <Button variant="outline" size="sm">
                     Change Avatar
@@ -207,7 +174,7 @@ const Profile = () => {
                   <Mail className="h-6 w-6" />
                   <div>
                     <p className="font-medium">Google</p>
-                    <p className="text-sm text-muted-foreground">Connected as {userData.email}</p>
+                    <p className="text-sm text-muted-foreground">Connected as {user.email}</p>
                   </div>
                 </div>
                 <Button size="sm" variant="outline">Disconnect</Button>

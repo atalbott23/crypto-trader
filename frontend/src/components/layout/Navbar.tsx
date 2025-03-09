@@ -1,10 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { LayoutGrid, LineChart, Wallet, Link2, Menu, X, Bot, User } from "lucide-react";
+import { LayoutGrid, LineChart, Wallet, Link2, Menu, X, Bot, User, LogIn } from "lucide-react";
 import { Button } from "@/components/ui-custom/Button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
 
 const NavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) => {
   const location = useLocation();
@@ -32,6 +33,7 @@ const Navbar = () => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   
   // Close mobile menu when route changes
   useEffect(() => {
@@ -39,7 +41,7 @@ const Navbar = () => {
   }, [location]);
 
   const navItems = [
-    { to: "/", icon: <LayoutGrid size={20} />, label: "Dashboard" },
+    { to: "/dashboard", icon: <LayoutGrid size={20} />, label: "Dashboard" },
     { to: "/assets", icon: <Wallet size={20} />, label: "Assets" },
     { to: "/performance", icon: <LineChart size={20} />, label: "Performance" },
     { to: "/auto-trading", icon: <Bot size={20} />, label: "Auto Trading" },
@@ -56,8 +58,8 @@ const Navbar = () => {
           </NavLink>
         </div>
 
-        {/* Desktop Navigation */}
-        {!isMobile && (
+        {/* Desktop Navigation - Only show if authenticated */}
+        {!isMobile && isAuthenticated && (
           <nav className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => (
               <NavLink
@@ -82,29 +84,43 @@ const Navbar = () => {
         )}
 
         {/* User Profile Button (both mobile and desktop) */}
-        <NavLink to="/profile" className={({ isActive }) => 
-          cn("ml-auto md:ml-0", 
-            isActive && !isMobile && "bg-primary text-primary-foreground rounded-lg"
-          )
-        }>
-          <Button 
-            variant={isMobile ? "ghost" : "outline"} 
-            size={isMobile ? "icon" : "default"}
-            className={cn(!isMobile && "rounded-lg")}
-          >
-            {isMobile ? (
-              <User size={24} />
-            ) : (
-              <>
-                <User size={16} className="mr-2" />
-                <span>Profile</span>
-              </>
-            )}
-          </Button>
-        </NavLink>
+        <div className="ml-auto md:ml-0 flex items-center gap-2">
+          {!isAuthenticated && !isMobile && (
+            <Link to="/profile">
+              <Button variant="default" size="default">
+                <LogIn size={16} className="mr-2" />
+                <span>Sign In</span>
+              </Button>
+            </Link>
+          )}
+          
+          <NavLink to="/profile" className={({ isActive }) => 
+            cn("", 
+              isActive && !isMobile && "bg-primary text-primary-foreground rounded-lg"
+            )
+          }>
+            <Button 
+              variant={isMobile ? "ghost" : "outline"} 
+              size={isMobile ? "icon" : "default"}
+              className={cn(
+                !isMobile && "rounded-lg",
+                location.pathname === "/profile" && "bg-primary text-primary-foreground hover:bg-primary/90"
+              )}
+            >
+              {isMobile ? (
+                <User size={24} />
+              ) : (
+                <>
+                  <User size={16} className="mr-2" />
+                  <span>Profile</span>
+                </>
+              )}
+            </Button>
+          </NavLink>
+        </div>
 
         {/* Mobile menu button */}
-        {isMobile && (
+        {isMobile && isAuthenticated && (
           <Button
             variant="ghost"
             size="icon"
@@ -118,7 +134,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Navigation */}
-      {isMobile && isOpen && (
+      {isMobile && isOpen && isAuthenticated && (
         <div className="fixed inset-0 top-16 z-50 bg-background animate-fade-in">
           <nav className="container flex flex-col space-y-2 p-4">
             {navItems.map((item) => (
